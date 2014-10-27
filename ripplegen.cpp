@@ -110,7 +110,7 @@ void LoopThread(unsigned int n, uint64_t eta50, string* ppattern,
                  << "#           Total Time:     " << nSecs << " seconds" << endl
                  << "#           ETA 50%:        " << eta50f << " " << unit << endl
                  << "#           Last:           " << account_id << endl
-                 << "#           Public key:           " << std::string(account_public.data())<< endl
+                 << "#           Public key:           " << std::string(account_public.begin(), account_public.begin()) << endl
                  << "#           Pattern:        " << pattern << endl
                  << "#" << endl;
         }
