@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////
 //
-// ripplegen.cpp 
+// ripplegen.cpp
 //
 // Copyright (c) 2013 Eric Lombrozo
 //
@@ -76,7 +76,8 @@ void LoopThread(unsigned int n, uint64_t eta50, string* ppattern,
     do {
         naSeed.setSeed(key);
         RippleAddress naGenerator = createGeneratorPublic(naSeed);
-        naAccount.setAccountPublic(naGenerator.getAccountPublic(), 0);
+        const std::vector<unsigned char>& account_public = naGenerator.getAccountPublic();
+        naAccount.setAccountPublic(account_public, 0);
         account_id = naAccount.humanAccountID();
         count++;
         if (count % UPDATE_ITERATIONS == 0) {
@@ -109,6 +110,7 @@ void LoopThread(unsigned int n, uint64_t eta50, string* ppattern,
                  << "#           Total Time:     " << nSecs << " seconds" << endl
                  << "#           ETA 50%:        " << eta50f << " " << unit << endl
                  << "#           Last:           " << account_id << endl
+                 << "#           Public key:           " << std::string(account_public.data())<< endl
                  << "#           Pattern:        " << pattern << endl
                  << "#" << endl;
         }
@@ -155,7 +157,7 @@ uint64_t getEta50(const string& pattern)
                                298610721385686486ull, 17319421840369816160ull };
     unsigned int len = pattern.size();
     if (len > 12) return 0xffffffffffffffffull;
-    return eta50[len]; 
+    return eta50[len];
 }
 
 int main(int argc, char* argv[])
@@ -199,10 +201,10 @@ int main(int argc, char* argv[])
 
     for (unsigned int i = 0; i < threads; i++)
         vpThreads[i]->join();
-   
+
     for (unsigned int i = 0; i < threads; i++)
         delete vpThreads[i];
- 
+
     cout << "#    master seed:     " << master_seed << endl
          << "#    master seed hex: " << master_seed_hex << endl
          << "#    account id:      " << account_id << endl
